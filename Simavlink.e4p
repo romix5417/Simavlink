@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project Simavlink -->
-<!-- Saved: 2018-04-03, 21:22:52 -->
+<!-- Saved: 2018-04-04, 17:15:42 -->
 <!-- Copyright (C) 2018 LMin, luomin5417@gmail.com -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -14,9 +14,13 @@
   <Eol index="0"/>
   <Sources>
     <Source>Simavlink.py</Source>
+    <Source>Ui_SimavlinkUi.py</Source>
     <Source>__init__.py</Source>
     <Source>mavlink.py</Source>
   </Sources>
+  <Forms>
+    <Form>SimavlinkUi.ui</Form>
+  </Forms>
   <Others>
     <Other>.gitignore</Other>
   </Others>

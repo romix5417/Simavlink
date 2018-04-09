@@ -1,18 +1,27 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\luomin\Desktop\mavlink\SimavlinkUi.ui'
+# Form implementation generated from reading ui file 'C:\Users\Administrator.2013-20160524CL\Desktop\Simavlink\SimavlinkUi.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from src import freqSerial
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtGui import QColor
+from mavlink import *
+from Mythread import *
+import time
+import threading
+
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(727, 523)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Dialog.sizePolicy().hasHeightForWidth())
@@ -290,6 +299,7 @@ class Ui_Dialog(object):
         self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
+        self.comboBox_3.addItem("")
         self.line_13 = QtWidgets.QFrame(Dialog)
         self.line_13.setGeometry(QtCore.QRect(10, 140, 480, 10))
         self.line_13.setFrameShape(QtWidgets.QFrame.HLine)
@@ -339,7 +349,8 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.lineEdit_8.setFont(font)
-        self.lineEdit_8.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lineEdit_8.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.lineEdit_8.setObjectName("lineEdit_8")
         self.lineEdit_9 = QtWidgets.QLineEdit(Dialog)
         self.lineEdit_9.setGeometry(QtCore.QRect(260, 350, 91, 31))
@@ -349,7 +360,8 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.lineEdit_9.setFont(font)
-        self.lineEdit_9.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lineEdit_9.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.lineEdit_9.setObjectName("lineEdit_9")
         self.lineEdit_10 = QtWidgets.QLineEdit(Dialog)
         self.lineEdit_10.setGeometry(QtCore.QRect(90, 400, 81, 31))
@@ -359,7 +371,8 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.lineEdit_10.setFont(font)
-        self.lineEdit_10.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lineEdit_10.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.lineEdit_10.setObjectName("lineEdit_10")
         self.lineEdit_11 = QtWidgets.QLineEdit(Dialog)
         self.lineEdit_11.setGeometry(QtCore.QRect(260, 400, 91, 31))
@@ -369,7 +382,8 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.lineEdit_11.setFont(font)
-        self.lineEdit_11.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lineEdit_11.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.lineEdit_11.setObjectName("lineEdit_11")
         self.lineEdit_12 = QtWidgets.QLineEdit(Dialog)
         self.lineEdit_12.setGeometry(QtCore.QRect(90, 450, 81, 31))
@@ -379,7 +393,8 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.lineEdit_12.setFont(font)
-        self.lineEdit_12.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lineEdit_12.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.lineEdit_12.setObjectName("lineEdit_12")
         self.lineEdit_13 = QtWidgets.QLineEdit(Dialog)
         self.lineEdit_13.setGeometry(QtCore.QRect(260, 450, 91, 31))
@@ -389,7 +404,8 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.lineEdit_13.setFont(font)
-        self.lineEdit_13.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lineEdit_13.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.lineEdit_13.setObjectName("lineEdit_13")
         self.label_21 = QtWidgets.QLabel(Dialog)
         self.label_21.setGeometry(QtCore.QRect(20, 300, 51, 31))
@@ -425,7 +441,7 @@ class Ui_Dialog(object):
         self.textBrowser.setGeometry(QtCore.QRect(380, 300, 321, 192))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
-        font.setPointSize(10)
+        font.setPointSize(9)
         font.setBold(True)
         font.setWeight(75)
         self.textBrowser.setFont(font)
@@ -434,9 +450,214 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
+        self.serial0 = None
+        self.label_serial0connect_true = 0
+        self.mythread = MyThread()
+        self.send_flag = False
+
+        self.pushButton.clicked.connect(self.serialconnect)
+        self.pushButton_3.clicked.connect(self.sendbutton)
+        self.t = None
+        self.thread_stop = False
+
+        self.t_browser = None
+        self.mavlink_message = ''
+
+    def serialconnect(self):
+        if self.label_serial0connect_true != 1:
+            serialNum = self.spinBox.value()
+            COM = "COM" + str(serialNum)
+            baudrate = self.comboBox_3.currentText()
+            try:
+                baudrate = int(baudrate)
+                print("COM:%s,baudrate:%s" % (COM, baudrate))
+                self.serial0 = freqSerial.connect_serial(COM, baudrate)
+            except Exception as e:
+                print(repr(e))
+                QMessageBox.warning(Dialog, "警告",
+                                    "串口波特率不对", QMessageBox.Yes)
+                self.serial0 = None
+
+            if self.serial0 is not None:
+                self.label_serial0connect_true = 1
+
+            if self.label_serial0connect_true == 0:
+                QMessageBox.warning(None, "警告", "打开串口失败", QMessageBox.Yes)
+            else:
+                self.pushButton.setText("连接成功")
+
+                self.t_browser = threading.Thread(target=self.thread_browser)
+                self.t_browser.start()
+        else:
+            self.serial0.close()
+            self.serial0 = None
+            self.label_serial0connect_true = 0
+            self.pushButton.setText("连接")
+
+    def mavlinkSet(self):
+        self.mavlink_message = self.comboBox_4.currentText()
+        self.mavlink_arg0 = int(self.lineEdit_8.text())
+        self.mavlink_arg1 = int(self.lineEdit_9.text())
+        self.mavlink_arg2 = int(self.lineEdit_10.text())
+        self.mavlink_arg3 = int(self.lineEdit_11.text())
+        self.mavlink_arg4 = int(self.lineEdit_12.text())
+        self.mavlink_arg5 = int(self.lineEdit_13.text())
+
+    def sendSet(self):
+        self.sendNum = int(self.lineEdit_6.text())
+        self.msgInterval = int(self.lineEdit_7.text())
+        self.circle_flag = self.radioButton.isChecked()
+
+    def mavlinkInit(self, SendCallfunc, flag):
+        if flag == "send":
+            fp = open("mavlink_send.log", "wb")
+        if flag == "recv":
+            fp = open("mavlink_recv.log", "wb")
+        self.mavlink = MAVLink(file=fp, srcSystem=1)
+        self.mavlink.set_send_callback(SendCallfunc)
+
+    def mavlinkSend(self, mavlink_message, arg0, arg1, arg2, arg3, arg4, arg5):
+        if mavlink_message == "heartbeat":
+            self.mavlink.heartbeat_send(arg0, arg1, arg2, arg3, arg4, arg5)
+
+        if mavlink_message == "ping":
+            tm = time.time()
+            tm = int(tm * 1000000)
+            arg0 = tm
+            print("tm:", tm)
+            seq = arg1
+            self.ping_msg = [arg0, seq]
+            self.mavlink.ping_send(arg0, arg1, arg2, arg3, arg4)
+
+    def serialcallfunc(self, mavmsg):
+        byte_array = mavmsg.get_msgbuf()
+        hex_array = list(byte_array)
+        hex_list = []
+
+        for i in hex_array:
+            byte_hex = hex(i)
+            if len(byte_hex) == 3:
+                byte_hex = byte_hex.replace('x', 'x0')
+            hex_list.append(byte_hex)
+        print("msg:", hex_list)
+
+        self.serial0.write(mavmsg.get_msgbuf())
+
+    def sendbutton(self):
+        self.SendCallfunc = None
+
+        if self.serial0 != None:
+            self.SendCallfunc = self.serialcallfunc
+
+        if self.SendCallfunc == None:
+            QMessageBox.warning(None, "警告", "发送失败, 发送方式没有设置！", QMessageBox.Yes)
+            return None
+
+        self.mavlinkSet()
+        self.sendSet()
+
+        self.mavlinkInit(self.SendCallfunc, "send")
+        if self.send_flag == False:
+            self.t = threading.Thread(target=self.thread_send)
+            self.t.start()
+            self.thread_stop = False
+            self.send_flag = True
+            self.pushButton_3.setText("正在发送")
+        else:
+            print("Thread stop!")
+            self.thread_stop = True
+            self.send_flag = False
+            self.pushButton_3.setText("发送")
+
+    def thread_send(self):
+        if self.circle_flag == True:
+            while True:
+                if self.thread_stop == True:
+                    break
+
+                self.mavlinkSend(self.mavlink_message, self.mavlink_arg0,
+                                 self.mavlink_arg1, self.mavlink_arg2,
+                                 self.mavlink_arg3, self.mavlink_arg4,
+                                 self.mavlink_arg5)
+                time.sleep(self.msgInterval / 1000)
+
+                print("continue thread send the msg!")
+        else:
+            for i in range(self.sendNum):
+                if self.thread_stop == True:
+                    break
+                self.mavlinkSend(self.mavlink_message, self.mavlink_arg0,
+                                 self.mavlink_arg1, self.mavlink_arg2,
+                                 self.mavlink_arg3, self.mavlink_arg4,
+                                 self.mavlink_arg5)
+                time.sleep(self.msgInterval / 1000)
+                print("thread send the msg:", i)
+
+        self.thread_stop = False
+        self.send_flag = False
+        self.pushButton_3.setText("发送")
+
+    def thread_browser(self):
+        text = ""
+        ping_flag = 0
+        delay_tm = 0
+
+        while True:
+            if self.serial0 == None or self.label_serial0connect_true == 0:
+                break
+
+            if self.serial0.isOpen():
+                try:
+                    n = self.serial0.inWaiting()
+                    byte_char = self.serial0.read(n)
+                    #text = str(byte_char, encoding="utf-8")
+                    list_hex = list(byte_char)
+
+                    if self.mavlink_message == "ping" and list_hex != []:
+
+                        if list_hex[-4] == 0:
+                            self.mavlinkInit(self.SendCallfunc, "recv")
+                            tm = time.time()
+                            tm = int(tm * 1000000)
+                            arg0 = tm
+                            arg1 = 1
+
+                            self.mavlinkSend("ping", arg0, arg1, 1, 0, 0, 0)
+
+                        if list_hex[-4] == 1:
+                            ping_flag = 1
+                            recv_tm = time.time()
+                            recv_tm = int(recv_tm * 1000000)
+
+                            delay_tm = recv_tm - self.ping_msg[0]
+
+                    for i in list_hex:
+                        byte_hex = hex(i)
+                        if len(byte_hex) == 3:
+                            byte_hex = byte_hex.replace('x', 'x0')
+
+                        text += byte_hex + " "
+                except Exception as e:
+                    print(repr(e))
+                    break
+
+            if text != "":
+                if ping_flag == 1:
+                    self.textBrowser.append(
+                        "接收报文: 类型-ping 延时- %d us" % delay_tm)
+                else:
+                    self.textBrowser.append("接收报文:")
+
+                text += "\n"
+                self.textBrowser.append(text)
+
+            #time.sleep(0.1)
+
+            text = ""
+
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "Simavlink_v0.5"))
         self.label.setText(_translate("Dialog", "串口配置"))
         self.label_2.setText(_translate("Dialog", "Mavlink配置"))
         self.label_3.setText(_translate("Dialog", "发送配置"))
@@ -457,9 +678,10 @@ class Ui_Dialog(object):
         self.pushButton_3.setText(_translate("Dialog", "发送"))
         self.label_15.setText(_translate("Dialog", "arg_0："))
         self.label_16.setText(_translate("Dialog", "arg_1："))
-        self.comboBox_3.setItemText(0, _translate("Dialog", "38400"))
-        self.comboBox_3.setItemText(1, _translate("Dialog", "57600"))
-        self.comboBox_3.setItemText(2, _translate("Dialog", "115200"))
+        self.comboBox_3.setItemText(0, _translate("Dialog", "9600"))
+        self.comboBox_3.setItemText(1, _translate("Dialog", "38400"))
+        self.comboBox_3.setItemText(2, _translate("Dialog", "57600"))
+        self.comboBox_3.setItemText(3, _translate("Dialog", "115200"))
         self.label_17.setText(_translate("Dialog", "arg_2："))
         self.label_18.setText(_translate("Dialog", "arg_3："))
         self.label_19.setText(_translate("Dialog", "arg_4："))
@@ -480,4 +702,3 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
-
