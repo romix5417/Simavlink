@@ -257,6 +257,7 @@ class Ui_Dialog(object):
         font.setWeight(75)
         self.label_14.setFont(font)
         self.label_14.setObjectName("label_14")
+
         self.radioButton = QtWidgets.QRadioButton(Dialog)
         self.radioButton.setGeometry(QtCore.QRect(510, 150, 111, 31))
         font = QtGui.QFont()
@@ -266,6 +267,17 @@ class Ui_Dialog(object):
         font.setWeight(75)
         self.radioButton.setFont(font)
         self.radioButton.setObjectName("radioButton")
+
+        self.radioButton_1 = QtWidgets.QRadioButton(Dialog)
+        self.radioButton_1.setGeometry(QtCore.QRect(621, 150, 100, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.radioButton_1.setFont(font)
+        self.radioButton_1.setObjectName("radioButton_1")
+
         self.pushButton_3 = QtWidgets.QPushButton(Dialog)
         self.pushButton_3.setGeometry(QtCore.QRect(510, 190, 201, 51))
         font = QtGui.QFont()
@@ -341,6 +353,51 @@ class Ui_Dialog(object):
         font.setWeight(75)
         self.label_20.setFont(font)
         self.label_20.setObjectName("label_20")
+
+        self.label_sys = QtWidgets.QLabel(Dialog)
+        self.label_sys.setGeometry(QtCore.QRect(131, 260, 50, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_sys.setFont(font)
+        self.label_sys.setObjectName("label_sys")
+
+        self.lineEdit_sys = QtWidgets.QLineEdit(Dialog)
+        self.lineEdit_sys.setGeometry(QtCore.QRect(181, 260, 40, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEdit_sys.setFont(font)
+        self.lineEdit_sys.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+        self.lineEdit_sys.setObjectName("lineEdit_sys")
+
+        self.label_comp = QtWidgets.QLabel(Dialog)
+        self.label_comp.setGeometry(QtCore.QRect(226, 260, 70, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_comp.setFont(font)
+        self.label_comp.setObjectName("label_sys")
+
+        self.lineEdit_comp = QtWidgets.QLineEdit(Dialog)
+        self.lineEdit_comp.setGeometry(QtCore.QRect(296, 260, 40, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEdit_comp.setFont(font)
+        self.lineEdit_comp.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+        self.lineEdit_comp.setObjectName("lineEdit_sys")
+
         self.lineEdit_8 = QtWidgets.QLineEdit(Dialog)
         self.lineEdit_8.setGeometry(QtCore.QRect(90, 350, 81, 31))
         font = QtGui.QFont()
@@ -416,13 +473,14 @@ class Ui_Dialog(object):
         font.setWeight(75)
         self.label_21.setFont(font)
         self.label_21.setObjectName("label_21")
+
         self.comboBox_4 = QtWidgets.QComboBox(Dialog)
         self.comboBox_4.setGeometry(QtCore.QRect(90, 300, 171, 31))
         self.comboBox_4.setObjectName("comboBox_4")
         self.comboBox_4.addItem("")
         self.comboBox_4.addItem("")
         self.comboBox_4.addItem("")
-        self.comboBox_4.addItem("")
+
         self.line_14 = QtWidgets.QFrame(Dialog)
         self.line_14.setGeometry(QtCore.QRect(360, 255, 10, 260))
         self.line_14.setFrameShape(QtWidgets.QFrame.VLine)
@@ -462,6 +520,17 @@ class Ui_Dialog(object):
 
         self.t_browser = None
         self.mavlink_message = ''
+        self.msgInterval = 0
+        self.sendNum = 1
+
+        self.mavlink_arg0 = 0
+        self.mavlink_arg1 = 0
+        self.mavlink_arg2 = 0
+        self.mavlink_arg3 = 0
+        self.mavlink_arg4 = 0
+        self.mavlink_arg5 = 0
+        self.sendmsg_hex = []
+        self.sendmsg_num = 0
 
     def serialconnect(self):
         if self.label_serial0connect_true != 1:
@@ -496,16 +565,32 @@ class Ui_Dialog(object):
 
     def mavlinkSet(self):
         self.mavlink_message = self.comboBox_4.currentText()
-        self.mavlink_arg0 = int(self.lineEdit_8.text())
-        self.mavlink_arg1 = int(self.lineEdit_9.text())
-        self.mavlink_arg2 = int(self.lineEdit_10.text())
-        self.mavlink_arg3 = int(self.lineEdit_11.text())
-        self.mavlink_arg4 = int(self.lineEdit_12.text())
-        self.mavlink_arg5 = int(self.lineEdit_13.text())
+
+        if self.lineEdit_8.text() != '':
+            self.mavlink_arg0 = int(self.lineEdit_8.text())
+
+        if self.lineEdit_9.text() != '':
+            self.mavlink_arg1 = int(self.lineEdit_9.text())
+
+        if self.lineEdit_10.text() != '':
+            self.mavlink_arg2 = int(self.lineEdit_10.text())
+
+        if self.lineEdit_11.text() != '':
+            self.mavlink_arg3 = int(self.lineEdit_11.text())
+
+        if self.lineEdit_12.text() != '':
+            self.mavlink_arg4 = int(self.lineEdit_12.text())
+
+        if self.lineEdit_13.text() != '':
+            self.mavlink_arg5 = int(self.lineEdit_13.text())
 
     def sendSet(self):
-        self.sendNum = int(self.lineEdit_6.text())
-        self.msgInterval = int(self.lineEdit_7.text())
+        if self.lineEdit_6.text() != '':
+            self.sendNum = int(self.lineEdit_6.text())
+
+        if self.lineEdit_7.text() != '':
+            self.msgInterval = int(self.lineEdit_7.text())
+
         self.circle_flag = self.radioButton.isChecked()
 
     def mavlinkInit(self, SendCallfunc, flag):
@@ -513,8 +598,14 @@ class Ui_Dialog(object):
             fp = open("mavlink_send.log", "wb")
         if flag == "recv":
             fp = open("mavlink_recv.log", "wb")
-        self.mavlink = MAVLink(file=fp, srcSystem=1)
+        self.mavlink = MAVLink(file=fp, srcSystem=1, srcComponent=0)
         self.mavlink.set_send_callback(SendCallfunc)
+
+        if self.lineEdit_sys.text() != '':
+            self.mavlink.srcSystem = int(self.lineEdit_sys.text())
+
+        if self.lineEdit_comp.text() != '':
+            self.mavlink.srcComponent = int(self.lineEdit_comp.text())
 
     def mavlinkSend(self, mavlink_message, arg0, arg1, arg2, arg3, arg4, arg5):
         if mavlink_message == "heartbeat":
@@ -529,19 +620,29 @@ class Ui_Dialog(object):
             self.ping_msg = [arg0, seq]
             self.mavlink.ping_send(arg0, arg1, arg2, arg3, arg4)
 
+        if mavlink_message == "file_transfer_protocol":
+            data = range(251)
+            data = list(data)
+            data = bytes(data)
+            self.mavlink.file_transfer_protocol_send(arg0, arg1, arg2, data)
+
     def serialcallfunc(self, mavmsg):
         byte_array = mavmsg.get_msgbuf()
-        hex_array = list(byte_array)
         hex_list = []
+        head_msg = b'\xFA\xFF\x32\x48'
+        buf = head_msg + byte_array[1:]
+
+        hex_array = list(buf)
 
         for i in hex_array:
             byte_hex = hex(i)
             if len(byte_hex) == 3:
                 byte_hex = byte_hex.replace('x', 'x0')
             hex_list.append(byte_hex)
+
         print("msg:", hex_list)
 
-        self.serial0.write(mavmsg.get_msgbuf())
+        self.serial0.write(buf)
 
     def sendbutton(self):
         self.SendCallfunc = None
@@ -555,6 +656,10 @@ class Ui_Dialog(object):
 
         self.mavlinkSet()
         self.sendSet()
+
+        if self.msgInterval <= 0:
+            QMessageBox.warning(None, "警告", "发送失败, 报文间隔设置错误！", QMessageBox.Yes)
+            return None
 
         self.mavlinkInit(self.SendCallfunc, "send")
         if self.send_flag == False:
@@ -590,8 +695,11 @@ class Ui_Dialog(object):
                                  self.mavlink_arg1, self.mavlink_arg2,
                                  self.mavlink_arg3, self.mavlink_arg4,
                                  self.mavlink_arg5)
-                time.sleep(self.msgInterval / 1000)
+
+                self.sendmsg_num = i + 1
                 print("thread send the msg:", i)
+                #self.textBrowser.append("thread send the msg:%d" % i)
+                time.sleep(self.msgInterval / 1000)
 
         self.thread_stop = False
         self.send_flag = False
@@ -601,6 +709,8 @@ class Ui_Dialog(object):
         text = ""
         ping_flag = 0
         delay_tm = 0
+        recv_msg = 0
+        list_hex = []
 
         while True:
             if self.serial0 == None or self.label_serial0connect_true == 0:
@@ -612,6 +722,9 @@ class Ui_Dialog(object):
                     byte_char = self.serial0.read(n)
                     #text = str(byte_char, encoding="utf-8")
                     list_hex = list(byte_char)
+
+                    if self.mavlink_message != "ping" and self.radioButton_1.isChecked() and list_hex != []:
+                        recv_msg += 1
 
                     if self.mavlink_message == "ping" and list_hex != []:
 
@@ -651,13 +764,23 @@ class Ui_Dialog(object):
                 text += "\n"
                 self.textBrowser.append(text)
 
-            #time.sleep(0.1)
+                if ping_flag != 1:
+                    self.textBrowser.append(
+                        "===================================")
+                    self.textBrowser.append("环回报告:")
+                    self.textBrowser.append("发送报文 - %d" % self.sendmsg_num)
+                    self.textBrowser.append("接收报文 - %d" % recv_msg)
+                    self.textBrowser.append(
+                        "===================================\n")
+
+            # time.sleep(0.1)
 
             text = ""
+        self.sendmsg_num = 0
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Simavlink_v0.5"))
+        Dialog.setWindowTitle(_translate("Dialog", "Simavlink_v1.7"))
         self.label.setText(_translate("Dialog", "串口配置"))
         self.label_2.setText(_translate("Dialog", "Mavlink配置"))
         self.label_3.setText(_translate("Dialog", "发送配置"))
@@ -675,6 +798,7 @@ class Ui_Dialog(object):
         self.label_13.setText(_translate("Dialog", "个"))
         self.label_14.setText(_translate("Dialog", "ms"))
         self.radioButton.setText(_translate("Dialog", "连续发包"))
+        self.radioButton_1.setText(_translate("Dialog", "环回检查"))
         self.pushButton_3.setText(_translate("Dialog", "发送"))
         self.label_15.setText(_translate("Dialog", "arg_0："))
         self.label_16.setText(_translate("Dialog", "arg_1："))
@@ -688,10 +812,12 @@ class Ui_Dialog(object):
         self.label_20.setText(_translate("Dialog", "arg_5："))
         self.label_21.setText(_translate("Dialog", "报文："))
         self.comboBox_4.setItemText(0, _translate("Dialog", "heartbeat"))
-        self.comboBox_4.setItemText(1, _translate("Dialog", "sys status"))
-        self.comboBox_4.setItemText(2, _translate("Dialog", "system time"))
-        self.comboBox_4.setItemText(3, _translate("Dialog", "ping"))
+        self.comboBox_4.setItemText(1, _translate("Dialog", "ping"))
+        self.comboBox_4.setItemText(2, _translate(
+            "Dialog", "file_transfer_protocol"))
         self.label_22.setText(_translate("Dialog", "Mavlink报文接收"))
+        self.label_sys.setText(_translate("Dialog", "SysID:"))
+        self.label_comp.setText(_translate("Dialog", "CompID:"))
 
 
 if __name__ == "__main__":
